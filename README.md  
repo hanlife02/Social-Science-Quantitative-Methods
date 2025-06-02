@@ -1,0 +1,212 @@
+# README.md (项目根目录)
+
+```markdown
+# Ethnic Group Exclusion and Armed Conflict Analysis
+
+This project analyzes whether politically excluded ethnic groups are more likely to engage in armed conflict in subsequent years, and how factors like geographic concentration and governance experience moderate this relationship.
+
+## Project Overview
+
+The research question we're investigating is:
+> Are excluded ethnic groups (those not participating in government or lacking power) more likely to engage in armed conflict in subsequent years? If so, how do factors such as geographic concentration and prior governance experience moderate this relationship?
+
+This analysis uses logistic regression models to predict the likelihood of conflict based on exclusion status, while examining the moderating effects of geographic concentration and governance experience.
+
+## Project Structure
+
+```
+ethnic_conflict_analysis/
+│
+├── main.py                   # Main program entry point
+├── config.py                 # Configuration file
+├── requirements.txt          # Package dependencies
+│
+├── data/                     # Data directory
+│   └── README.md             # Data documentation file
+│
+├── output/                   # Output directory
+│   ├── figures/              # Figures output directory
+│   └── results/              # Results output directory
+│
+├── src/                      # Source code directory
+│   ├── __init__.py           # Package initialization file
+│   ├── data_processing.py    # Data loading and preprocessing
+│   ├── descriptive_stats.py  # Descriptive statistics analysis
+│   ├── visualization.py      # Data visualization
+│   ├── modeling.py           # Statistical modeling
+│   └── interpretation.py     # Results interpretation
+│
+└── README.md                 # This file
+```
+
+## Data Description
+
+The dataset includes information on ethnic groups across different countries and years with these key variables:
+
+- `gwgroupid`: Ethnic group ID
+- `countries_gwid`: Country ID
+- `year`: Year of observation
+- `groupname`: Name of the ethnic group
+- `countryname`: Name of the country
+- `statusname`: Political status name (e.g., DISCRIMINATED, POWERLESS, etc.)
+- `status_pwrrank`: Political status rank (1-7)
+  - 1: DISCRIMINATED
+  - 2: POWERLESS
+  - 3: SELF-EXCLUSION
+  - 4: JUNIOR PARTNER
+  - 5: SENIOR PARTNER
+  - 6: DOMINANT
+  - 7: MONOPOLY
+  - (Ranks 1-3 are considered "excluded" groups)
+- `upgraded10`: Prior governance experience in past 10 years (0=no, 1=yes)
+- `geo_concentrated`: Geographic concentration (0=dispersed, 1=concentrated)
+- `incidence_flag`: Level 1 conflict indicator (0=no, 1=yes)
+- `incidence_terr_flag`: Level 2 conflict indicator (0=no, 1=yes)
+- `incidence_gov_flag`: Level 3 conflict indicator (0=no, 1=yes)
+
+## Requirements
+
+- Python 3.6+
+- Required packages in `requirements.txt`
+
+Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+## Usage
+
+1. Place your CSV data file in the `data/` directory with filename "ethnic_conflict_data.csv", or specify a custom path when running the script.
+
+2. Run the main script:
+```bash
+python main.py
+```
+
+Or with a custom data file:
+```bash
+python main.py path/to/your/data.csv
+```
+
+3. View the results in the `output/` directory:
+   - Visualizations in `output/figures/`
+   - Model results and interpretation in `output/results/`
+
+## Analysis Features
+
+The analysis includes:
+
+1. **Data Preprocessing**
+   - Identifies excluded groups (status_pwrrank ≤ 3)
+   - Creates comprehensive conflict indicators
+   - Generates future conflict variables for time-lagged analysis
+
+2. **Descriptive Statistics**
+   - Percentage of excluded groups
+   - Conflict incidence rates by political status
+   - Comparison between excluded and included groups
+
+3. **Visualizations**
+   - Conflict rates by political status
+   - Relationship between exclusion, geographic concentration and conflict
+   - Relationship between exclusion, prior governance experience and conflict
+   - Time trends of conflict by exclusion status
+
+4. **Statistical Models**
+   - Current conflict models (contemporaneous effects)
+   - Future conflict models (lagged effects)
+   - Interaction models testing moderating effects
+
+5. **Results Interpretation**
+   - Assessment of main effect of exclusion on conflict
+   - Analysis of moderating effects
+   - Comprehensive conclusions about the research question
+
+## Key Research Questions
+
+1. Do excluded groups have a higher probability of engaging in armed conflict in subsequent years?
+2. Does geographic concentration strengthen or weaken the relationship between exclusion and conflict?
+3. Does prior governance experience modify the effect of exclusion on conflict likelihood?
+
+## Methodology
+
+The analysis uses logistic regression models with the following approach:
+1. Baseline models examining the direct relationship between exclusion and conflict
+2. Enhanced models incorporating control variables
+3. Interaction models testing moderating effects
+4. Time-lagged models examining future conflict probability
+```
+
+# README.md (data 目录)
+
+```markdown
+# Data Directory
+
+This directory contains the data files used for the ethnic conflict analysis project.
+
+## Expected Data File
+
+The main analysis script expects a CSV file named `ethnic_conflict_data.csv` in this directory, unless a custom path is specified when running the script.
+
+## Data Format
+
+The dataset should include the following columns:
+
+| Column Name | Description | Values |
+|-------------|-------------|--------|
+| `gwgroupid` | Ethnic group ID | Numeric identifier |
+| `countries_gwid` | Country ID | Numeric identifier |
+| `year` | Year of observation | Year (e.g., 1990-2020) |
+| `groupname` | Name of the ethnic group | Text |
+| `countryname` | Name of the country | Text |
+| `statusname` | Political status name | Text (e.g., "DISCRIMINATED", "POWERLESS", etc.) |
+| `status_pwrrank` | Political status rank | 1-7 (see details below) |
+| `upgraded10` | Prior governance experience in past 10 years | 0=no, 1=yes |
+| `geo_concentrated` | Geographic concentration | 0=dispersed, 1=concentrated |
+| `incidence_flag` | Level 1 conflict indicator | 0=no, 1=yes |
+| `incidence_terr_flag` | Level 2 conflict indicator | 0=no, 1=yes |
+| `incidence_gov_flag` | Level 3 conflict indicator | 0=no, 1=yes |
+
+## Political Status Ranks
+
+The `status_pwrrank` column uses a 1-7 scale to represent the political status of ethnic groups:
+
+1. **DISCRIMINATED**: Groups facing active, intentional discrimination by the state
+2. **POWERLESS**: Groups excluded from central power but not actively discriminated against
+3. **SELF-EXCLUSION**: Groups that have excluded themselves from central power
+4. **JUNIOR PARTNER**: Groups with some representation in government, but as junior partners
+5. **SENIOR PARTNER**: Groups with significant representation in government as senior partners
+6. **DOMINANT**: Groups that dominate the government
+7. **MONOPOLY**: Groups that hold exclusive control over the government
+
+In our analysis, groups with ranks 1-3 are considered "excluded" groups, while those with ranks 4-7 are considered "included" groups.
+
+## Data Sources
+
+This analysis typically uses data from sources such as:
+- The Ethnic Power Relations (EPR) dataset
+- The UCDP/PRIO Armed Conflict Dataset
+- Other supplementary data sources on ethnic groups and conflicts
+
+## Data Preparation
+
+If you need to prepare your own data file, ensure it:
+- Is in CSV format with the columns listed above
+- Has no missing values in key variables
+- Uses consistent coding for categorical variables
+- Has proper date formatting for the year column
+
+## Example Data
+
+If you don't have access to the full dataset, a sample of the expected format is shown below:
+
+```
+gwgroupid,countries_gwid,year,groupname,countryname,statusname,status_pwrrank,upgraded10,geo_concentrated,incidence_flag,incidence_terr_flag,incidence_gov_flag
+101,705,1990,"Group A","Country X","POWERLESS",2,0,1,0,0,0
+101,705,1991,"Group A","Country X","POWERLESS",2,0,1,0,0,0
+102,705,1990,"Group B","Country X","DOMINANT",6,1,0,0,0,0
+103,710,1990,"Group C","Country Y","JUNIOR PARTNER",4,1,1,1,0,1
+```
+```
+
+这两个README文件提供了项目的全面概述和数据格式的详细说明。根据需要，你可以进一步定制它们以包含更具体的信息或者特定的使用说明。
