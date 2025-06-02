@@ -1,13 +1,3 @@
-'''
-Author: Ethan && ethan@hanlife02.com
-Date: 2025-06-02 20:07:16
-LastEditors: Ethan && ethan@hanlife02.com
-LastEditTime: 2025-06-02 20:08:30
-FilePath: /Social-Science-Quantitative-Methods/ethnic_conflict_analysis/main.py
-Description: 
-
-Copyright (c) 2025 by Ethan, All Rights Reserved. 
-'''
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -20,14 +10,17 @@ in subsequent years, and how factors like geographic concentration and governanc
 import os
 import sys
 import pandas as pd
+import warnings
+
+# 导入配置和模块
 from config import DATA_PATH, OUTPUT_FIGURE_PATH, OUTPUT_RESULTS_PATH
 
-# Import modules
+# 导入各个功能模块
 from src.data_processing import load_and_preprocess_data
 from src.descriptive_stats import generate_descriptive_stats
-from src.visualization import create_visualizations
-from output.figures.modeling import build_statistical_models
-from src.interpretation import interpret_results
+from src.visualization import create_visualizations, create_advanced_visualizations
+from src.modeling import build_statistical_models
+from src.interpretation import interpret_results, interpret_improved_results, answer_research_questions
 
 def setup_directories():
     """Set up output directories"""
@@ -36,15 +29,18 @@ def setup_directories():
 
 def main(file_path=None):
     """
-    Main function to coordinate the entire analysis workflow.
+    Main function to coordinate the entire analysis workflow with improved methods
     
     Parameters:
-    file_path (str, optional): Path to the CSV file. Defaults to None, which will use the path from config.
+    file_path (str, optional): Path to the CSV file
     """
-    # Set up directories
+    # 忽略警告，使输出更清晰
+    warnings.filterwarnings('ignore')
+    
+    # 设置目录
     setup_directories()
     
-    # Use default path if not provided
+    # 使用默认路径如果未提供
     if file_path is None:
         file_path = DATA_PATH
     
@@ -56,29 +52,43 @@ def main(file_path=None):
     desc_stats = generate_descriptive_stats(df)
     print("Descriptive statistics complete\n")
     
-    print("Creating visualizations...")
-    create_visualizations(df)
-    print("Visualizations created\n")
+    print("Creating standard visualizations...")
+    create_visualizations(df, OUTPUT_FIGURE_PATH)
+    print("Standard visualizations created\n")
     
-    print("Building statistical models...")
+    print("Building improved statistical models...")
     model_results = build_statistical_models(df)
     print("Model building complete\n")
     
-    print("Interpreting results...")
-    interpretation = interpret_results(model_results)
-    print("Results interpretation complete\n")
+    print("Creating advanced visualizations...")
+    create_advanced_visualizations(df, model_results, OUTPUT_FIGURE_PATH)
+    print("Advanced visualizations created\n")
     
-    # Output results
+    print("Interpreting results with improved methods...")
+    interpretation = interpret_improved_results(model_results, df, OUTPUT_RESULTS_PATH)
+    print("Detailed interpretation complete\n")
+    
+    print("Answering research questions directly...")
+    answers = answer_research_questions(model_results, df, OUTPUT_RESULTS_PATH)
+    print("Research questions answered\n")
+    
+    # 输出结果
     print("=" * 80)
-    print("Model Regression Results (Current Conflict):")
-    print(model_results['current_conflict_summary'])
-    print("\nModel Regression Results (Future Conflict):")
-    print(model_results['future_conflict_summary'])
+    print("Model Regression Results:")
+    print(model_results['summary_table'])
+    if 'future_summary_table' in model_results:
+        print("\nFuture Conflict Model Results:")
+        print(model_results['future_summary_table'])
     print("\n" + "=" * 80)
-    print("Summary of findings saved to output/results/model_interpretation.md")
+    print("Key Findings:")
+    print(answers)
+    print("\n" + "=" * 80)
+    print("Analysis complete! Results saved to output directory.")
+    print(f"- Visualizations: {OUTPUT_FIGURE_PATH}")
+    print(f"- Detailed results: {OUTPUT_RESULTS_PATH}")
 
 if __name__ == "__main__":
-    # Check if file path is provided as command line argument
+    # 检查是否提供了文件路径作为命令行参数
     if len(sys.argv) > 1:
         file_path = sys.argv[1]
         main(file_path)
