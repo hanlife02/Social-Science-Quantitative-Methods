@@ -13,8 +13,6 @@
 3. Moderating effect of prior governance experience: interaction coefficient is -0.0785, but not significant (p=0.8073).
    We cannot confirm that prior governance experience moderates the exclusion-conflict relationship.
 
-
-
 ## 2. Future Conflict Analysis
 
 ### Future Conflict Models Interpretation
