@@ -26,7 +26,7 @@ from config import DATA_PATH, OUTPUT_FIGURE_PATH, OUTPUT_RESULTS_PATH
 from src.data_processing import load_and_preprocess_data
 from src.descriptive_stats import generate_descriptive_stats
 from src.visualization import create_visualizations
-from src.modeling import build_statistical_models
+from output.figures.modeling import build_statistical_models
 from src.interpretation import interpret_results
 
 def setup_directories():
